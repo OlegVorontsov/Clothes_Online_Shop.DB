@@ -8,6 +8,7 @@ namespace Clothes_Online_Shop.DB.Data
     {
         public void Add(Order order);
         List<Order> GetAll();
+        List<Order> GetAllByUserName(string userName);
         Order TryGetById(Guid orderId);
         void DeleteOrder(Guid orderId);
         void UpdateStatus(Guid orderId, OrderStatus newStatus);

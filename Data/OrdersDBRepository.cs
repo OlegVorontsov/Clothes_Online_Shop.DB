@@ -40,12 +40,23 @@ namespace Clothes_Online_Shop.DB.Data
                                          .ToList();
             return orders;
         }
+        public List<Order> GetAllByUserName(string userName)
+        {
+            var orders = dataBaseContext.Orders
+                                        .Include(x => x.UserInfo)
+                                        .Include(x => x.Items)
+                                        .ThenInclude(x => x.Product)
+                                        .Where(o => o.UserInfo.Email == userName)
+                                        .ToList();
+            return orders;
+        }
 
         public Order TryGetById(Guid orderId)
         {
             var order = dataBaseContext.Orders.Include(x => x.UserInfo)
                                          .Include(x => x.Items)
                                          .ThenInclude(x => x.Product)
+                                         .ThenInclude(x => x.ImgList)
                                          .FirstOrDefault(o => o.Id == orderId);
             return order;
         }

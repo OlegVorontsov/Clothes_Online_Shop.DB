@@ -31,7 +31,9 @@ namespace Clothes_Online_Shop.DB.Data
         }
         public void Update(Product product)
         {
-            var existingProduct = dataBaseContext.Products.FirstOrDefault(p => p.Id == product.Id);
+            var existingProduct = dataBaseContext.Products
+                                                 .Include(x => x.ImgList)
+                                                 .FirstOrDefault(p => p.Id == product.Id);
             if (existingProduct == null)
             {
                 return;
@@ -46,6 +48,12 @@ namespace Clothes_Online_Shop.DB.Data
             existingProduct.Brand = product.Brand;
             existingProduct.Country = product.Country;
             existingProduct.Description = product.Description;
+
+            foreach (var img in product.ImgList)
+            {
+                img.ProductId = product.Id;
+                dataBaseContext.ImgInfos.Add(img);
+            }
             dataBaseContext.SaveChanges();
         }
         public void Delete(Guid productId)
